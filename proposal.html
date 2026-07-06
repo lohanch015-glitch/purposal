@@ -1,0 +1,1090 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Halima ❤️ Malik Mudasir — A Love Story</title>
+<style>
+/* ============================================================
+   ROOT VARIABLES — each scene overrides its own palette
+   ============================================================ */
+:root{
+  --gold:#e8c27a;
+  --rose:#ff6f91;
+  --glass-bg: rgba(255,255,255,0.10);
+  --glass-border: rgba(255,255,255,0.25);
+  --text-light:#fdf6ec;
+  --accent:#ff8fa3;
+  --shadow: rgba(0,0,0,0.45);
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{
+  width:100%;height:100%;
+  font-family:'Georgia','Palatino Linotype',serif;
+  overflow-x:hidden;
+  background:#000;
+  color:var(--text-light);
+  scroll-behavior:smooth;
+  -webkit-font-smoothing:antialiased;
+}
+body{overflow-y:auto;}
+
+/* Elegant heading font stack (system, no external fonts) */
+h1,h2,h3, .brand{
+  font-family:'Brush Script MT','Segoe Script','Georgia',cursive,serif;
+  letter-spacing:1px;
+}
+
+::selection{background:var(--accent);color:#1a0510;}
+
+/* ============================================================
+   GLOBAL CANVAS LAYERS (hearts / particles / confetti / fireworks)
+   ============================================================ */
+#bgCanvas, #fxCanvas{
+  position:fixed;top:0;left:0;
+  width:100%;height:100%;
+  pointer-events:none;
+  z-index:2;
+}
+#bgCanvas{z-index:1;}
+
+/* ============================================================
+   MUSIC TOGGLE
+   ============================================================ */
+#musicToggle{
+  position:fixed;
+  top:18px;right:18px;
+  z-index:1000;
+  width:52px;height:52px;
+  border-radius:50%;
+  background:var(--glass-bg);
+  border:1px solid var(--glass-border);
+  backdrop-filter:blur(10px);
+  color:#fff;
+  font-size:22px;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;
+  box-shadow:0 4px 18px var(--shadow);
+  transition:transform .3s ease, box-shadow .3s ease;
+}
+#musicToggle:hover{transform:scale(1.1) rotate(10deg);}
+#musicToggle.playing{animation:pulseNote 1.4s infinite ease-in-out;}
+@keyframes pulseNote{
+  0%,100%{box-shadow:0 0 0 0 rgba(255,140,170,.55);}
+  50%{box-shadow:0 0 0 14px rgba(255,140,170,0);}
+}
+
+/* Progress dots */
+#progress{
+  position:fixed;
+  bottom:16px;left:50%;
+  transform:translateX(-50%);
+  display:flex;gap:8px;
+  z-index:1000;
+}
+#progress .dot{
+  width:9px;height:9px;border-radius:50%;
+  background:rgba(255,255,255,.3);
+  transition:all .4s ease;
+}
+#progress .dot.active{
+  background:var(--accent);
+  box-shadow:0 0 10px var(--accent);
+  transform:scale(1.35);
+}
+
+/* ============================================================
+   SCENE STRUCTURE
+   ============================================================ */
+.scene{
+  position:relative;
+  min-height:100vh;
+  width:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:60px 18px;
+  overflow:hidden;
+  z-index:5;
+  opacity:0;
+  transform:translateY(40px) scale(.98);
+  transition:opacity 1.1s ease, transform 1.1s ease;
+}
+.scene.active{
+  opacity:1;
+  transform:translateY(0) scale(1);
+}
+.scene-bg{
+  position:absolute;inset:0;
+  z-index:0;
+  background-size:cover;background-position:center;
+}
+.scene-bg img, .scene-bg video{
+  width:100%;height:100%;object-fit:cover;opacity:.35;
+}
+.scene-overlay{
+  position:absolute;inset:0;z-index:1;
+  mix-blend-mode:normal;
+}
+
+/* Glass card */
+.glass-card{
+  position:relative;z-index:6;
+  max-width:640px;width:100%;
+  background:var(--glass-bg);
+  border:1px solid var(--glass-border);
+  border-radius:26px;
+  padding:44px 32px;
+  text-align:center;
+  backdrop-filter:blur(18px) saturate(160%);
+  -webkit-backdrop-filter:blur(18px) saturate(160%);
+  box-shadow:0 20px 60px var(--shadow), inset 0 1px 0 rgba(255,255,255,.15);
+  animation:floatCard 6s ease-in-out infinite;
+}
+@keyframes floatCard{
+  0%,100%{transform:translateY(0);}
+  50%{transform:translateY(-10px);}
+}
+
+.scene h1.title{
+  font-size:clamp(2rem,6vw,3.4rem);
+  margin-bottom:14px;
+  text-shadow:0 0 25px rgba(255,255,255,.35);
+}
+.quote{
+  font-style:italic;
+  font-size:clamp(1.05rem,2.6vw,1.35rem);
+  color:var(--gold);
+  margin-bottom:18px;
+  opacity:.95;
+  text-shadow:0 2px 12px rgba(0,0,0,.5);
+}
+.message{
+  font-size:clamp(.98rem,2.2vw,1.15rem);
+  line-height:1.7;
+  margin-bottom:26px;
+  min-height:70px;
+  color:var(--text-light);
+}
+.question{
+  font-size:clamp(1.1rem,2.6vw,1.5rem);
+  margin-bottom:28px;
+  font-weight:bold;
+  color:#fff;
+  text-shadow:0 2px 10px rgba(0,0,0,.5);
+}
+
+/* typewriter caret */
+.typewriter::after{
+  content:'|';
+  animation:blink 0.8s infinite;
+  color:var(--accent);
+}
+@keyframes blink{0%,49%{opacity:1;}50%,100%{opacity:0;}}
+
+/* buttons */
+.btn-row{
+  display:flex;gap:22px;justify-content:center;flex-wrap:wrap;
+  position:relative;min-height:70px;
+}
+.btn{
+  border:none;outline:none;cursor:pointer;
+  padding:14px 34px;
+  font-size:1.05rem;
+  border-radius:50px;
+  font-weight:700;
+  letter-spacing:.5px;
+  font-family:inherit;
+  transition:transform .25s ease, box-shadow .25s ease;
+  position:relative;
+  z-index:20;
+}
+.btn-yes{
+  background:linear-gradient(135deg,#2ecc71,#27ae60);
+  color:#fff;
+  box-shadow:0 8px 22px rgba(39,174,96,.55);
+}
+.btn-yes:hover{transform:scale(1.08) translateY(-3px);box-shadow:0 12px 30px rgba(39,174,96,.75);}
+.btn-yes:active{transform:scale(.96);}
+.btn-no{
+  background:linear-gradient(135deg,#ff5f7e,#e63950);
+  color:#fff;
+  box-shadow:0 8px 22px rgba(230,57,80,.55);
+  position:relative;
+}
+.btn-no.escaping{
+  position:fixed !important;
+  transition:top .35s ease, left .35s ease;
+}
+.btn.shine::before{
+  content:'';
+  position:absolute;inset:0;
+  border-radius:50px;
+  background:linear-gradient(120deg,transparent,rgba(255,255,255,.55),transparent);
+  transform:translateX(-120%);
+  transition:transform .6s;
+}
+.btn.shine:hover::before{transform:translateX(120%);}
+
+/* funny popup */
+#funnyPopup{
+  position:fixed;inset:0;
+  background:rgba(0,0,0,.6);
+  display:none;align-items:center;justify-content:center;
+  z-index:2000;
+  backdrop-filter:blur(6px);
+}
+#funnyPopup .box{
+  background:linear-gradient(135deg,#2b0a1e,#4a0f2a);
+  border:1px solid var(--glass-border);
+  padding:34px 26px;border-radius:22px;
+  max-width:380px;text-align:center;
+  box-shadow:0 20px 60px rgba(0,0,0,.6);
+  animation:popIn .4s ease;
+}
+@keyframes popIn{from{transform:scale(.6);opacity:0;}to{transform:scale(1);opacity:1;}}
+#funnyPopup p{margin-bottom:18px;font-size:1.05rem;line-height:1.6;}
+
+/* ============================================================
+   INDIVIDUAL SCENE PALETTES & BACKGROUNDS (pure CSS, no images req)
+   ============================================================ */
+/* Scene 1 - Golden sunset lake */
+#scene1{ background:radial-gradient(ellipse at 50% 20%, #ffdca8 0%, #ff9966 35%, #7a4b3a 70%, #1c1010 100%);}
+#scene1 .glass-card{--glass-bg:rgba(255,225,180,.14);--glass-border:rgba(255,220,170,.35);--shadow:rgba(90,40,10,.5);}
+#scene1 .quote{--gold:#ffe6b0;}
+
+/* Scene 2 - starry night */
+#scene2{background:radial-gradient(circle at 50% 10%, #1b2a52 0%, #0d1330 50%, #05070f 100%);}
+#scene2 .glass-card{--glass-bg:rgba(160,180,255,.10);--glass-border:rgba(180,200,255,.3);--shadow:rgba(5,10,30,.6);}
+#scene2 .quote{--gold:#b9c8ff;}
+
+/* Scene 3 - cherry blossom */
+#scene3{background:radial-gradient(circle at 50% 15%, #ffd6e8 0%, #ff9fc0 45%, #7a3355 85%, #23101a 100%);}
+#scene3 .glass-card{--glass-bg:rgba(255,210,230,.14);--glass-border:rgba(255,210,230,.35);--shadow:rgba(90,20,50,.5);}
+#scene3 .quote{--gold:#ffd9ea;}
+
+/* Scene 4 - candlelight dinner */
+#scene4{background:radial-gradient(circle at 50% 30%, #4a2410 0%, #2c1608 55%, #0d0603 100%);}
+#scene4 .glass-card{--glass-bg:rgba(255,200,120,.10);--glass-border:rgba(255,200,120,.3);--shadow:rgba(30,10,0,.6);}
+#scene4 .quote{--gold:#ffcf8a;}
+
+/* Scene 5 - mountains & waterfalls */
+#scene5{background:radial-gradient(circle at 50% 10%, #bfe9ff 0%, #6fb6d9 40%, #1c4f6b 75%, #08161f 100%);}
+#scene5 .glass-card{--glass-bg:rgba(190,240,255,.14);--glass-border:rgba(190,240,255,.35);--shadow:rgba(5,25,35,.55);}
+#scene5 .quote{--gold:#d8f4ff;}
+
+/* Scene 6 - beach sunset */
+#scene6{background:linear-gradient(180deg,#ff9a76 0%, #ff6a88 40%, #6a3a6e 75%, #1a0e22 100%);}
+#scene6 .glass-card{--glass-bg:rgba(255,190,170,.14);--glass-border:rgba(255,190,170,.35);--shadow:rgba(60,15,35,.5);}
+#scene6 .quote{--gold:#ffd8c2;}
+
+/* Scene 7 - rose garden */
+#scene7{background:radial-gradient(circle at 50% 20%, #5c0f24 0%, #350a17 55%, #12040a 100%);}
+#scene7 .glass-card{--glass-bg:rgba(255,150,180,.10);--glass-border:rgba(255,150,180,.3);--shadow:rgba(40,5,15,.6);}
+#scene7 .quote{--gold:#ff9fbb;}
+
+/* Scene 8 - moonlight roses */
+#scene8{background:radial-gradient(circle at 50% 15%, #2b2540 0%, #1a1530 50%, #07050f 100%);}
+#scene8 .glass-card{--glass-bg:rgba(200,180,255,.10);--glass-border:rgba(200,180,255,.3);--shadow:rgba(10,5,25,.6);}
+#scene8 .quote{--gold:#cbb8ff;}
+
+/* Scene 9 - proposal setup */
+#scene9{background:radial-gradient(circle at 50% 25%, #4a0f1f 0%, #2a0813 55%, #0a0308 100%);}
+#scene9 .glass-card{--glass-bg:rgba(255,190,210,.12);--glass-border:rgba(255,190,210,.35);--shadow:rgba(40,0,15,.6);}
+#scene9 .quote{--gold:#ffc7d8;}
+
+/* Scene 10 - grand finale */
+#scene10{background:radial-gradient(circle at 50% 20%, #3a0a1a 0%, #1c0510 55%, #050208 100%);}
+#scene10 .glass-card{--glass-bg:rgba(255,210,225,.12);--glass-border:rgba(255,210,225,.35);--shadow:rgba(40,0,20,.65);}
+#scene10 .quote{--gold:#ffd3e2;}
+
+/* soft vignette on all scenes */
+.scene::before{
+  content:'';position:absolute;inset:0;z-index:0;
+  background:radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,.55) 100%);
+  pointer-events:none;
+}
+
+/* decorative lighting glow orbs */
+.glow-orb{
+  position:absolute;border-radius:50%;
+  filter:blur(50px);
+  opacity:.55;
+  z-index:0;
+  animation:orbFloat 8s ease-in-out infinite;
+}
+@keyframes orbFloat{
+  0%,100%{transform:translate(0,0) scale(1);}
+  50%{transform:translate(20px,-25px) scale(1.15);}
+}
+
+/* small hearts float animation reused everywhere */
+.floating-heart{
+  position:absolute;
+  bottom:-40px;
+  font-size:22px;
+  opacity:.85;
+  animation:heartRise linear forwards;
+  pointer-events:none;
+  z-index:7;
+  filter:drop-shadow(0 0 6px rgba(255,120,150,.6));
+}
+@keyframes heartRise{
+  0%{transform:translateY(0) translateX(0) rotate(0deg);opacity:0;}
+  10%{opacity:1;}
+  100%{transform:translateY(-110vh) translateX(var(--drift,20px)) rotate(360deg);opacity:0;}
+}
+
+/* Scene 9 giant heading glow */
+.glow-heading{
+  font-size:clamp(2.4rem,8vw,4.6rem);
+  text-align:center;
+  color:#fff;
+  text-shadow:0 0 20px var(--accent),0 0 45px var(--accent),0 0 80px rgba(255,110,150,.6);
+  animation:glowPulse 2.4s ease-in-out infinite;
+}
+@keyframes glowPulse{
+  0%,100%{text-shadow:0 0 20px var(--accent),0 0 45px var(--accent);}
+  50%{text-shadow:0 0 35px var(--accent),0 0 90px var(--accent),0 0 130px rgba(255,110,150,.8);}
+}
+
+/* final letter - urdu */
+.urdu-letter{
+  font-family:'Jameel Noori Nastaleeq','Noto Nastaliq Urdu','Segoe UI',serif;
+  direction:rtl;
+  font-size:clamp(1.1rem,3vw,1.6rem);
+  line-height:2.4;
+  text-align:center;
+  color:#ffe9ef;
+  margin:26px 0;
+  text-shadow:0 2px 14px rgba(0,0,0,.6);
+}
+.signature{
+  font-size:1.3rem;
+  margin-top:10px;
+  color:var(--gold);
+}
+
+/* heartbeat */
+.heartbeat{
+  width:70px;height:70px;margin:26px auto 0;
+  position:relative;
+}
+.heartbeat svg{
+  width:100%;height:100%;
+  animation:beat 1.1s infinite;
+  filter:drop-shadow(0 0 14px rgba(255,80,120,.9));
+}
+@keyframes beat{
+  0%,100%{transform:scale(1);}
+  15%{transform:scale(1.28);}
+  30%{transform:scale(1);}
+  45%{transform:scale(1.2);}
+  60%{transform:scale(1);}
+}
+
+/* fireworks canvas full screen for scene 10 */
+#fxCanvas{z-index:900;}
+
+/* welcome overlay */
+#welcomeOverlay{
+  position:fixed;inset:0;z-index:5000;
+  background:radial-gradient(circle at 50% 40%,#3a0a1a,#0a0308 80%);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:20px;
+  transition:opacity 1s ease, visibility 1s ease;
+}
+#welcomeOverlay h1{
+  font-size:clamp(2rem,7vw,3.6rem);
+  color:#fff;
+  text-shadow:0 0 30px var(--accent);
+  margin-bottom:18px;
+}
+#welcomeOverlay p{
+  color:#f4d9e2;font-size:1.05rem;margin-bottom:30px;max-width:480px;
+}
+#enterBtn{
+  padding:16px 46px;border-radius:50px;border:none;cursor:pointer;
+  background:linear-gradient(135deg,#ff6f91,#c9184a);
+  color:#fff;font-size:1.15rem;font-weight:bold;
+  box-shadow:0 10px 35px rgba(255,80,120,.55);
+  animation:pulseBtn 1.8s infinite;
+}
+@keyframes pulseBtn{
+  0%,100%{transform:scale(1);}
+  50%{transform:scale(1.06);}
+}
+#welcomeOverlay.hidden{opacity:0;visibility:hidden;pointer-events:none;}
+
+/* responsive tweaks */
+@media(max-width:480px){
+  .glass-card{padding:30px 20px;border-radius:20px;}
+  .btn{padding:12px 24px;font-size:.95rem;}
+  #musicToggle{width:44px;height:44px;font-size:18px;top:12px;right:12px;}
+}
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     WELCOME / ENTRY OVERLAY
+     ============================================================ -->
+<div id="welcomeOverlay">
+  <h1 class="brand">For Halima ❤️</h1>
+  <p>Malik Mudasir has written something for you... a journey through ten little worlds. Turn your sound on, sit back, and let it unfold. 🌹</p>
+  <button id="enterBtn">Begin Our Story ❤️</button>
+</div>
+
+<!-- Background ambient canvas (stars / particles) -->
+<canvas id="bgCanvas"></canvas>
+<!-- Foreground effects canvas (confetti / fireworks / heart rain) -->
+<canvas id="fxCanvas"></canvas>
+
+<!-- Music toggle -->
+<div id="musicToggle" title="Toggle romantic ambience">🎵</div>
+
+<!-- Progress dots -->
+<div id="progress"></div>
+
+<!-- Funny "no button" popup -->
+<div id="funnyPopup">
+  <div class="box">
+    <p>😄 Oops! There is no NO option in my love story.<br>My heart only accepts YES.<br>Please press YES ❤️</p>
+    <button class="btn btn-yes shine" id="popupOk">Okay, I'll press YES 😊</button>
+  </div>
+</div>
+
+<!-- ============================================================
+     SCENE 1 — Our Beginning
+     ============================================================ -->
+<section class="scene" id="scene1" data-scene="1">
+  <div class="scene-bg"><img src="images/bg1.jpg" alt="" onerror="this.style.display='none'"></div>
+  <div class="glow-orb" style="width:260px;height:260px;background:#ffdca8;top:8%;left:10%;"></div>
+  <div class="glow-orb" style="width:200px;height:200px;background:#ff9966;bottom:10%;right:12%;"></div>
+  <div class="glass-card">
+    <h1 class="title">Hi Halima ❤️</h1>
+    <p class="message typewriter" data-text="The day I met you, life quietly became more beautiful. Some people enter our lives for a moment, but you became the reason behind my happiest dreams."></p>
+    <p class="question">Will you continue this beautiful journey with me?</p>
+    <div class="btn-row">
+      <button class="btn btn-yes shine" data-next="2">💚 Yes</button>
+      <button class="btn btn-no shine" data-nobtn>❤️ No</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SCENE 2 — You Are My Peace
+     ============================================================ -->
+<section class="scene" id="scene2" data-scene="2">
+  <div class="scene-bg"><img src="images/bg2.jpg" alt="" onerror="this.style.display='none'"></div>
+  <div class="glow-orb" style="width:220px;height:220px;background:#7fa2ff;top:12%;right:14%;"></div>
+  <div class="glass-card">
+    <h1 class="title">You Are My Peace</h1>
+    <p class="quote">"Home is not a place anymore… it's wherever you are."</p>
+    <p class="message typewriter" data-text="You are the calm in my chaos, the smile after every difficult day, and the peace my heart always searched for."></p>
+    <p class="question">Can I always call you my happiness?</p>
+    <div class="btn-row">
+      <button class="btn btn-yes shine" data-next="3">Yes</button>
+      <button class="btn btn-no shine" data-nobtn>No</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SCENE 3 — Every Smile Matters
+     ============================================================ -->
+<section class="scene" id="scene3" data-scene="3">
+  <div class="scene-bg"><img src="images/bg3.jpg" alt="" onerror="this.style.display='none'"></div>
+  <div class="glow-orb" style="width:240px;height:240px;background:#ffb6d5;bottom:10%;left:8%;"></div>
+  <div class="glass-card">
+    <h1 class="title">Every Smile Matters</h1>
+    <p class="quote">"Your smile is my favorite sunrise."</p>
+    <p class="message typewriter" data-text="I promise to protect your smile, respect your dreams, and stand beside you through every season of life."></p>
+    <p class="question">Will you let me make you smile forever?</p>
+    <div class="btn-row">
+      <button class="btn btn-yes shine" data-next="4">Yes</button>
+      <button class="btn btn-no shine" data-nobtn>No</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SCENE 4 — My Promise
+     ============================================================ -->
+<section class="scene" id="scene4" data-scene="4">
+  <div class="scene-bg"><img src="images/couple1.jpg" alt="" onerror="this.style.display='none'"></div>
+  <div class="glow-orb" style="width:200px;height:200px;background:#ffcf8a;top:16%;left:16%;"></div>
+  <div class="glass-card">
+    <h1 class="title">My Promise</h1>
+    <p class="quote">"Love is not about perfection. It's about choosing each other every single day."</p>
+    <p class="message typewriter" data-text="I promise loyalty, honesty, respect, trust, and endless support."></p>
+    <p class="question">Will you trust me with your heart?</p>
+    <div class="btn-row">
+      <button class="btn btn-yes shine" data-next="5">Yes</button>
+      <button class="btn btn-no shine" data-nobtn>No</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SCENE 5 — Our Adventures
+     ============================================================ -->
+<section class="scene" id="scene5" data-scene="5">
+  <div class="scene-bg"><img src="images/bg1.jpg" alt="" onerror="this.style.display='none'"></div>
+  <div class="glow-orb" style="width:230px;height:230px;background:#bfe9ff;bottom:14%;right:10%;"></div>
+  <div class="glass-card">
+    <h1 class="title">Our Adventures</h1>
+    <p class="quote">"Life becomes an adventure when you're walking beside the right person."</p>
+    <p class="message typewriter" data-text="I want to travel the world with you, laugh with you, and collect unforgettable memories together."></p>
+    <p class="question">Will you explore life with me?</p>
+    <div class="btn-row">
+      <button class="btn btn-yes shine" data-next="6">Yes</button>
+      <button class="btn btn-no shine" data-nobtn>No</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SCENE 6 — Forever
+     ============================================================ -->
+<section class="scene" id="scene6" data-scene="6">
+  <div class="scene-bg"><img src="images/bg2.jpg" alt="" onerror="this.style.display='none'"></div>
+  <div class="glow-orb" style="width:250px;height:250px;background:#ff9a76;top:10%;left:12%;"></div>
+  <div class="glass-card">
+    <h1 class="title">Forever</h1>
+    <p class="quote">"Forever begins with one beautiful YES."</p>
+    <p class="message typewriter" data-text="I don't want temporary moments. I want forever with you."></p>
+    <p class="question">Will you stay with me forever?</p>
+    <div class="btn-row">
+      <button class="btn btn-yes shine" data-next="7">Yes</button>
+      <button class="btn btn-no shine" data-nobtn>No</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SCENE 7 — Respect Before Love
+     ============================================================ -->
+<section class="scene" id="scene7" data-scene="7">
+  <div class="scene-bg"><img src="images/bg3.jpg" alt="" onerror="this.style.display='none'"></div>
+  <div class="glow-orb" style="width:220px;height:220px;background:#ff5f7e;bottom:12%;left:10%;"></div>
+  <div class="glass-card">
+    <h1 class="title">Respect Before Love</h1>
+    <p class="quote">"Real love begins with respect."</p>
+    <p class="message typewriter" data-text="I promise to respect your opinions, protect your heart, support your dreams, and always value your happiness."></p>
+    <p class="question">Can I become your safe place?</p>
+    <div class="btn-row">
+      <button class="btn btn-yes shine" data-next="8">Yes</button>
+      <button class="btn btn-no shine" data-nobtn>No</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SCENE 8 — My Heart
+     ============================================================ -->
+<section class="scene" id="scene8" data-scene="8">
+  <div class="scene-bg"><img src="images/couple2.jpg" alt="" onerror="this.style.display='none'"></div>
+  <div class="glow-orb" style="width:230px;height:230px;background:#cbb8ff;top:14%;right:14%;"></div>
+  <div class="glass-card">
+    <h1 class="title">My Heart</h1>
+    <p class="quote">"Among billions of people, my heart chose only you."</p>
+    <p class="message typewriter" data-text="You are my favorite hello and my hardest goodbye."></p>
+    <p class="question">Will you always stay inside my heart?</p>
+    <div class="btn-row">
+      <button class="btn btn-yes shine" data-next="9">Yes</button>
+      <button class="btn btn-no shine" data-nobtn>No</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SCENE 9 — One Last Question
+     ============================================================ -->
+<section class="scene" id="scene9" data-scene="9">
+  <div class="scene-bg"><img src="images/bg2.jpg" alt="" onerror="this.style.display='none'"></div>
+  <div class="glow-orb" style="width:260px;height:260px;background:#ffc7d8;top:8%;left:8%;"></div>
+  <div class="glass-card">
+    <h1 class="glow-heading">Halima ❤️</h1>
+    <p class="message typewriter" data-text="I don't need the whole world… I only need you."></p>
+    <p class="question">Will You Be Mine Forever?</p>
+    <div class="btn-row">
+      <button class="btn btn-yes shine" data-next="10">💚 YES</button>
+      <button class="btn btn-no shine" data-nobtn>❤️ NO</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SCENE 10 — Grand Proposal
+     ============================================================ -->
+<section class="scene" id="scene10" data-scene="10">
+  <div class="scene-bg"><video src="videos/proposal.mp4" autoplay loop muted playsinline onerror="this.style.display='none'"></video></div>
+  <div class="glow-orb" style="width:300px;height:300px;background:#ff5f7e;top:6%;left:6%;"></div>
+  <div class="glow-orb" style="width:260px;height:260px;background:#ffd3e2;bottom:8%;right:8%;"></div>
+
+  <div class="glass-card" id="finaleCard">
+    <h1 class="glow-heading" id="finaleName">Halima ❤️</h1>
+    <div id="finaleLines" style="margin:18px 0;min-height:170px;"></div>
+
+    <div id="finaleProposal" style="display:none;">
+      <h2 class="glow-heading" style="font-size:clamp(1.8rem,6vw,3rem);">💍 Halima…</h2>
+      <p class="question" style="margin-top:10px;">Will you love me? ❤️</p>
+      <div class="btn-row">
+        <button class="btn btn-yes shine" id="finalYes">💚 YES, Forever</button>
+        <button class="btn btn-no shine" data-nobtn>❤️ No</button>
+      </div>
+    </div>
+
+    <div id="loveLetter" style="display:none;">
+      <div class="urdu-letter">
+        ادھوری چاہتیں میری، ادھوری داستاں میری،<br>
+        میرے جذبے ادھورے ہیں، میری خواہش کے پیمانے ادھورے ہیں۔<br>
+        محبت کے مرے ہونٹوں پہ افسانے ادھورے ہیں۔<br>
+        ہجومِ غم کی دنیا میرے چاروں طرف ہے،<br>
+        پھر بھی اپنے دل کی سب گہرائیوں کے ساتھ،<br>
+        سب سچائیوں کے ساتھ، میں اقرار کرتا ہوں…<br><br>
+        ❤️ میں تم سے پیار کرتا ہوں۔ ❤️
+      </div>
+      <p class="signature">Forever Yours,</p>
+      <p class="signature" style="font-size:1.5rem;">Malik Mudasir ❤️</p>
+      <div class="heartbeat">
+        <svg viewBox="0 0 32 29" xmlns="http://www.w3.org/2000/svg">
+          <path fill="#ff4d6d" d="M23.6,0c-3.4,0-6.3,2.1-7.6,5.1C14.7,2.1,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,10.8,15.1,16,20.5 c5.2-5.4,16-11.1,16-20.5C32,3.8,28.2,0,23.6,0z"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+/* ============================================================
+   GLOBAL STATE
+   ============================================================ */
+const totalScenes = 10;
+let currentScene = 1;
+
+/* ------------------------------------------------------------
+   PROGRESS DOTS
+   ------------------------------------------------------------ */
+const progressEl = document.getElementById('progress');
+for(let i=1;i<=totalScenes;i++){
+  const d = document.createElement('div');
+  d.className = 'dot' + (i===1 ? ' active' : '');
+  d.dataset.dot = i;
+  progressEl.appendChild(d);
+}
+function updateProgress(n){
+  document.querySelectorAll('#progress .dot').forEach(dot=>{
+    dot.classList.toggle('active', Number(dot.dataset.dot) === n);
+  });
+}
+
+/* ------------------------------------------------------------
+   WELCOME OVERLAY
+   ------------------------------------------------------------ */
+document.getElementById('enterBtn').addEventListener('click', ()=>{
+  document.getElementById('welcomeOverlay').classList.add('hidden');
+  goToScene(1, true);
+  startAmbientBackground();
+});
+
+/* ------------------------------------------------------------
+   SCENE NAVIGATION
+   ------------------------------------------------------------ */
+function goToScene(n, first){
+  const prevEl = document.getElementById('scene'+currentScene);
+  const nextEl = document.getElementById('scene'+n);
+  if(!nextEl) return;
+
+  if(!first && prevEl) prevEl.classList.remove('active');
+
+  // smooth scroll then reveal
+  nextEl.scrollIntoView({behavior:'smooth', block:'start'});
+  setTimeout(()=>{
+    nextEl.classList.add('active');
+    runTypewritersIn(nextEl);
+  }, first ? 50 : 250);
+
+  currentScene = n;
+  updateProgress(n);
+
+  if(n === 10){
+    setTimeout(runGrandFinale, 900);
+  }
+}
+
+document.querySelectorAll('[data-next]').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    const n = Number(btn.dataset.next);
+    launchMiniConfetti(btn);
+    goToScene(n);
+  });
+});
+
+/* ------------------------------------------------------------
+   TYPEWRITER EFFECT (per-scene message paragraphs)
+   ------------------------------------------------------------ */
+function runTypewritersIn(sceneEl){
+  const targets = sceneEl.querySelectorAll('.typewriter');
+  targets.forEach(t=>{
+    if(t.dataset.done) return;
+    const full = t.dataset.text || t.textContent;
+    t.textContent = '';
+    t.dataset.done = '1';
+    let i = 0;
+    const speed = 28;
+    (function type(){
+      if(i <= full.length){
+        t.textContent = full.slice(0,i);
+        i++;
+        setTimeout(type, speed);
+      }
+    })();
+  });
+}
+
+/* ------------------------------------------------------------
+   THE NO BUTTON — never allows rejection
+   ------------------------------------------------------------ */
+let noClickCounts = new WeakMap();
+
+document.querySelectorAll('[data-nobtn]').forEach(btn=>{
+  noClickCounts.set(btn, 0);
+  btn.addEventListener('click', (e)=>{
+    e.preventDefault();
+    let count = noClickCounts.get(btn) + 1;
+    noClickCounts.set(btn, count);
+
+    if(count >= 5){
+      showFunnyPopup();
+      return;
+    }
+    dodgeButton(btn, count);
+  });
+
+  // also dodge simply on hover/touch approach for extra fun after a couple of clicks
+  btn.addEventListener('mouseenter', ()=>{
+    const count = noClickCounts.get(btn) || 0;
+    if(count >= 3){
+      dodgeButton(btn, count+1);
+    }
+  });
+});
+
+function dodgeButton(btn, count){
+  const rect = btn.getBoundingClientRect();
+  btn.classList.add('escaping');
+
+  // base speed grows with clicks; becomes fast + jumpy after 3rd/4th click
+  const margin = 60;
+  const maxX = window.innerWidth - rect.width - margin;
+  const maxY = window.innerHeight - rect.height - margin;
+  let newX = Math.random() * Math.max(maxX, 10) + margin/2;
+  let newY = Math.random() * Math.max(maxY, 10) + margin/2;
+
+  // keep it somewhat away from current position for a "jump" feel after click 3+
+  if(count >= 3){
+    newX = Math.random() < 0.5 ? Math.random()*80 : window.innerWidth - rect.width - Math.random()*80;
+    newY = Math.random() < 0.5 ? Math.random()*80 : window.innerHeight - rect.height - Math.random()*80;
+  }
+
+  btn.style.left = newX + 'px';
+  btn.style.top = newY + 'px';
+  btn.style.transitionDuration = count >= 4 ? '.18s' : (count===3 ? '.28s' : '.4s');
+}
+
+function showFunnyPopup(){
+  document.getElementById('funnyPopup').style.display = 'flex';
+}
+document.getElementById('popupOk').addEventListener('click', ()=>{
+  document.getElementById('funnyPopup').style.display = 'none';
+  // reset all no-buttons back to normal flow position for calm UI
+  document.querySelectorAll('[data-nobtn]').forEach(b=>{
+    b.classList.remove('escaping');
+    b.style.left = '';
+    b.style.top = '';
+  });
+});
+
+/* ------------------------------------------------------------
+   BACKGROUND AMBIENT CANVAS — twinkling stars / soft particles
+   ------------------------------------------------------------ */
+const bgCanvas = document.getElementById('bgCanvas');
+const bgCtx = bgCanvas.getContext('2d');
+let bgParticles = [];
+
+function resizeCanvases(){
+  [bgCanvas, document.getElementById('fxCanvas')].forEach(c=>{
+    c.width = window.innerWidth;
+    c.height = window.innerHeight;
+  });
+}
+window.addEventListener('resize', resizeCanvases);
+resizeCanvases();
+
+function startAmbientBackground(){
+  bgParticles = Array.from({length:70}, ()=>({
+    x: Math.random()*bgCanvas.width,
+    y: Math.random()*bgCanvas.height,
+    r: Math.random()*1.8+0.4,
+    speed: Math.random()*0.3+0.05,
+    twinkle: Math.random()*Math.PI*2
+  }));
+  requestAnimationFrame(animateBg);
+  // spawn floating hearts continuously
+  setInterval(spawnFloatingHeart, 900);
+}
+
+function animateBg(){
+  bgCtx.clearRect(0,0,bgCanvas.width,bgCanvas.height);
+  bgParticles.forEach(p=>{
+    p.twinkle += 0.03;
+    const alpha = 0.4 + Math.sin(p.twinkle)*0.4;
+    bgCtx.beginPath();
+    bgCtx.arc(p.x,p.y,p.r,0,Math.PI*2);
+    bgCtx.fillStyle = `rgba(255,255,255,${Math.max(alpha,0.05)})`;
+    bgCtx.fill();
+    p.y -= p.speed;
+    if(p.y < -5){ p.y = bgCanvas.height+5; p.x = Math.random()*bgCanvas.width; }
+  });
+  requestAnimationFrame(animateBg);
+}
+
+/* floating hearts across whole page */
+function spawnFloatingHeart(){
+  const heart = document.createElement('div');
+  heart.className = 'floating-heart';
+  heart.textContent = ['❤️','💕','💗','🌹','✨'][Math.floor(Math.random()*5)];
+  heart.style.left = Math.random()*100 + 'vw';
+  heart.style.setProperty('--drift', (Math.random()*140-70)+'px');
+  heart.style.animationDuration = (6+Math.random()*5)+'s';
+  heart.style.fontSize = (16+Math.random()*18)+'px';
+  document.body.appendChild(heart);
+  setTimeout(()=>heart.remove(), 12000);
+}
+
+/* ------------------------------------------------------------
+   MINI CONFETTI BURST on every "Yes" click
+   ------------------------------------------------------------ */
+const fxCanvas = document.getElementById('fxCanvas');
+const fxCtx = fxCanvas.getContext('2d');
+let fxParticles = [];
+let fxAnimating = false;
+
+function launchMiniConfetti(originEl){
+  const rect = originEl.getBoundingClientRect();
+  const colors = ['#ff6f91','#ffd166','#8ac926','#4cc9f0','#ffffff','#c9184a'];
+  for(let i=0;i<40;i++){
+    fxParticles.push({
+      x: rect.left+rect.width/2,
+      y: rect.top+rect.height/2,
+      vx: (Math.random()-0.5)*8,
+      vy: (Math.random()-1.6)*8,
+      size: Math.random()*6+3,
+      color: colors[Math.floor(Math.random()*colors.length)],
+      life: 60+Math.random()*30,
+      shape: Math.random()>0.5 ? 'rect':'circle'
+    });
+  }
+  if(!fxAnimating) animateFx();
+}
+
+function animateFx(){
+  fxAnimating = true;
+  fxCtx.clearRect(0,0,fxCanvas.width,fxCanvas.height);
+  fxParticles.forEach(p=>{
+    p.x += p.vx;
+    p.y += p.vy;
+    p.vy += 0.18;
+    p.life--;
+    fxCtx.globalAlpha = Math.max(p.life/90,0);
+    fxCtx.fillStyle = p.color;
+    if(p.shape==='rect'){
+      fxCtx.fillRect(p.x,p.y,p.size,p.size);
+    } else {
+      fxCtx.beginPath();
+      fxCtx.arc(p.x,p.y,p.size/2,0,Math.PI*2);
+      fxCtx.fill();
+    }
+  });
+  fxCtx.globalAlpha = 1;
+  fxParticles = fxParticles.filter(p=>p.life>0);
+  if(fxParticles.length>0 || fireworksActive){
+    requestAnimationFrame(animateFx);
+  } else {
+    fxAnimating = false;
+    fxCtx.clearRect(0,0,fxCanvas.width,fxCanvas.height);
+  }
+}
+
+/* ------------------------------------------------------------
+   FIREWORKS (grand finale)
+   ------------------------------------------------------------ */
+let fireworksActive = false;
+function launchFirework(){
+  const x = Math.random()*fxCanvas.width;
+  const y = Math.random()*fxCanvas.height*0.5 + 40;
+  const colors = ['#ff6f91','#ffd166','#8ac926','#4cc9f0','#ffffff','#c9184a','#ff9fbb'];
+  const color = colors[Math.floor(Math.random()*colors.length)];
+  for(let i=0;i<50;i++){
+    const angle = (Math.PI*2*i)/50;
+    const speed = Math.random()*4+2;
+    fxParticles.push({
+      x,y,
+      vx: Math.cos(angle)*speed,
+      vy: Math.sin(angle)*speed,
+      size: Math.random()*3+2,
+      color,
+      life: 60+Math.random()*20,
+      shape:'circle'
+    });
+  }
+}
+
+function startFireworksLoop(duration){
+  fireworksActive = true;
+  if(!fxAnimating) animateFx();
+  const interval = setInterval(launchFirework, 400);
+  setTimeout(()=>{
+    clearInterval(interval);
+    fireworksActive = false;
+  }, duration);
+}
+
+/* heart rain for finale */
+function startHeartRain(duration){
+  const end = Date.now()+duration;
+  (function drop(){
+    if(Date.now() > end) return;
+    spawnFloatingHeart();
+    setTimeout(drop, 150);
+  })();
+}
+
+/* ------------------------------------------------------------
+   MUSIC TOGGLE — Web Audio API generated ambience (no external file)
+   ------------------------------------------------------------ */
+let audioCtx, musicNodes = [], musicPlaying = false;
+document.getElementById('musicToggle').addEventListener('click', ()=>{
+  const btn = document.getElementById('musicToggle');
+  if(!musicPlaying){
+    startAmbientTone();
+    btn.classList.add('playing');
+    btn.textContent = '🔊';
+    musicPlaying = true;
+  } else {
+    stopAmbientTone();
+    btn.classList.remove('playing');
+    btn.textContent = '🎵';
+    musicPlaying = false;
+  }
+});
+
+function startAmbientTone(){
+  audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  // soft romantic pad using layered oscillators (original, non-copyrighted)
+  const freqs = [261.63, 329.63, 392.00]; // C-E-G major chord, gentle pad
+  const masterGain = audioCtx.createGain();
+  masterGain.gain.value = 0.05;
+  masterGain.connect(audioCtx.destination);
+
+  freqs.forEach((f,idx)=>{
+    const osc = audioCtx.createOscillator();
+    osc.type = 'sine';
+    osc.frequency.value = f;
+    const gain = audioCtx.createGain();
+    gain.gain.value = 0.0001;
+    osc.connect(gain);
+    gain.connect(masterGain);
+    osc.start();
+    // gentle fade-in swell
+    gain.gain.exponentialRampToValueAtTime(0.15, audioCtx.currentTime+2+idx*0.5);
+    musicNodes.push({osc, gain});
+  });
+
+  // slow LFO-like volume breathing for master gain
+  musicNodes.push({master:masterGain});
+}
+
+function stopAmbientTone(){
+  musicNodes.forEach(n=>{
+    if(n.osc){
+      try{
+        n.gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime+1);
+        n.osc.stop(audioCtx.currentTime+1.1);
+      }catch(e){}
+    }
+  });
+  musicNodes = [];
+  setTimeout(()=>{ if(audioCtx) audioCtx.close(); }, 1200);
+}
+
+/* ------------------------------------------------------------
+   GRAND FINALE SEQUENCE (Scene 10)
+   ------------------------------------------------------------ */
+let finaleStarted = false;
+function runGrandFinale(){
+  if(finaleStarted) return;
+  finaleStarted = true;
+
+  const lines = [
+    "Halima ❤️",
+    "\"You are my today.\"",
+    "\"You are my tomorrow.\"",
+    "\"You are my forever.\"",
+    "\"I promise to respect you.\"",
+    "\"I promise to protect your smile.\"",
+    "\"I promise to love you every single day.\""
+  ];
+  const container = document.getElementById('finaleLines');
+  container.innerHTML = '';
+  let i = 0;
+
+  startFireworksLoop(20000);
+  startHeartRain(20000);
+
+  function showNextLine(){
+    if(i >= lines.length){
+      setTimeout(()=>{
+        document.getElementById('finaleProposal').style.display = 'block';
+      }, 900);
+      return;
+    }
+    const p = document.createElement('p');
+    p.style.fontSize = i===0 ? 'clamp(1.8rem,6vw,2.6rem)' : 'clamp(1.05rem,2.6vw,1.3rem)';
+    p.style.margin = '10px 0';
+    p.style.color = i===0 ? '#fff' : 'var(--gold)';
+    if(i===0) p.classList.add('glow-heading');
+    p.style.opacity = 0;
+    p.style.transition = 'opacity 1s ease, transform 1s ease';
+    p.style.transform = 'translateY(15px)';
+    container.appendChild(p);
+    requestAnimationFrame(()=>{
+      p.style.opacity = 1;
+      p.style.transform = 'translateY(0)';
+    });
+    p.textContent = lines[i];
+    i++;
+    setTimeout(showNextLine, 1500);
+  }
+  showNextLine();
+}
+
+document.getElementById('finalYes').addEventListener('click', (e)=>{
+  launchMiniConfetti(e.target);
+  startFireworksLoop(8000);
+  document.getElementById('finaleProposal').style.display = 'none';
+  document.getElementById('loveLetter').style.display = 'block';
+});
+
+/* the finale's own No button also uses the universal dodge behavior via [data-nobtn] listeners already bound */
+
+/* ------------------------------------------------------------
+   Kick off typewriter for the very first (already visible) scene
+   when overlay is dismissed — handled in goToScene(1,true)
+   ------------------------------------------------------------ */
+</script>
+</body>
+</html>
